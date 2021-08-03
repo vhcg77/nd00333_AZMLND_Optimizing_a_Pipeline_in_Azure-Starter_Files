@@ -72,15 +72,15 @@ def main():
 
     args = parser.parse_args()
 
-    run.log("Regularization Strength:", np.float(args.C))
-    run.log("Max iterations:", np.int(args.max_iter))
+    run.log("Regularization Strength:", float(args.C))
+    run.log("Max iterations:", int(args.max_iter))
     run.log("Solver:", str(args.solver))
     run.log("Penalty:", str(args.penalty))
 
     model = LogisticRegression(penalty=args.penalty, C=args.C, max_iter=args.max_iter, solver=args.solver).fit(x_train, y_train)
 
     accuracy = model.score(x_test, y_test)
-    run.log("Accuracy", np.float(accuracy))
+    run.log("Accuracy", float(accuracy))
 
 if __name__ == '__main__':
     main()
