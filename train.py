@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from sklearn.linear_model import LogisticRegression
 import argparse
@@ -45,7 +46,7 @@ def clean_data(data):
 
     return x_df, y_df
 
-    
+
 ds= TabularDatasetFactory.from_delimited_files("https://automlsamplenotebookdata.blob.core.windows.net/automl-sample-notebook-data/bankmarketing_train.csv")
 
 
@@ -63,7 +64,9 @@ run = Run.get_context()
 def main():
     # Add arguments to script
     parser = argparse.ArgumentParser()
-
+    
+    parser.add_argument('--solver', type=str, default='lbfgs', help="Algorithm to use in the optimization problem.")
+    parser.add_argument('--penalty', type=str, default='l2', help="Used to specify the norm used in the penalization. The ‘newton-cg’, ‘sag’ and ‘lbfgs’ solvers support only l2 penalties. ‘elasticnet’ is only supported by the ‘saga’ solver. If ‘none’ (not supported by the liblinear solver), no regularization is applied.")
     parser.add_argument('--C', type=float, default=1.0, help="Inverse of regularization strength. Smaller values cause stronger regularization")
     parser.add_argument('--max_iter', type=int, default=100, help="Maximum number of iterations to converge")
 
@@ -72,7 +75,7 @@ def main():
     run.log("Regularization Strength:", np.float(args.C))
     run.log("Max iterations:", np.int(args.max_iter))
 
-    model = LogisticRegression(C=args.C, max_iter=args.max_iter).fit(x_train, y_train)
+    model = LogisticRegression(penalty=args.penalty, C=args.C, max_iter=args.max_iter).fit(x_train, y_train)
 
     accuracy = model.score(x_test, y_test)
     run.log("Accuracy", np.float(accuracy))
